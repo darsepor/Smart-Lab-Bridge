@@ -163,4 +163,3 @@ cython_debug/
 filtered_active_companies_combined.csv
 data_20241118.json
 filtered_active_companies.csv
-list_of_industries.py
