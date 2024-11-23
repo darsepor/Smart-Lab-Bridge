@@ -39,7 +39,7 @@ document.getElementById("process-button").addEventListener("click", async () => 
             console.debug("DEBUG: Server response received, starting to read response body stream");
             const reader = response.body.getReader();
             const decoder = new TextDecoder("utf-8");
-            let receivedText = "";
+            let buffer = ""; // Accumulate chunks here
 
             while (true) {
                 const { value, done } = await reader.read();
@@ -51,30 +51,57 @@ document.getElementById("process-button").addEventListener("click", async () => 
                 const chunk = decoder.decode(value, { stream: true });
                 console.debug("DEBUG: Chunk received from server:", chunk);
 
-                receivedText += chunk;
+                // Append the chunk to show progress
+                const progressDiv = document.createElement("div");
+                progressDiv.innerHTML = chunk; // Display raw chunk content temporarily
+                progressDiv.classList.add("progress-chunk"); // Add a temporary class
+                resultsDiv.appendChild(progressDiv);
 
+                buffer += chunk;
+
+                // Attempt to extract valid JSON or HTML
                 try {
-                    // Parse partial JSON as it is received
-                    console.debug("DEBUG: Attempting to parse receivedText");
-                    const partialData = JSON.parse(receivedText);
-                    console.debug("DEBUG: Parsed partial data:", partialData);
+                    // Clean up trailing commas and whitespace
+                    buffer = buffer.replace(/,(\s*[}\]])/g, "$1").trim();
 
-                    resultsDiv.innerHTML = ""; // Clear existing results
-                    console.debug("DEBUG: Cleared existing resultsDiv content");
+                    // If it's valid JSON, process and overwrite
+                    if (buffer.endsWith("]}")) {
+                        const validJson = JSON.parse(buffer);
+                        console.debug("DEBUG: Parsed valid JSON:", validJson);
 
-                    partialData.results.forEach((item) => {
-                        console.debug("DEBUG: Appending company data to resultsDiv", item);
+                        // Clear all progress chunks
+                        document.querySelectorAll(".progress-chunk").forEach((el) => el.remove());
 
-                        const companyDiv = document.createElement("div");
-                        companyDiv.innerHTML = `
-                            <h2>${item.company_name}</h2>
-                            <p><strong>Analysis:</strong> ${item.analysis}</p>
-                            <p><strong>Sales Leads:</strong> ${item.sales_leads}</p>
-                        `;
-                        resultsDiv.appendChild(companyDiv);
-                    });
+                        // Display final results
+                        validJson.results.forEach((item) => {
+                            const companyDiv = document.createElement("div");
+                            companyDiv.innerHTML = `
+                                <h2>${item.company_name}</h2>
+                                <p><strong>Analysis:</strong> ${item.analysis}</p>
+                                <p><strong>Sales Leads:</strong> ${item.sales_leads}</p>
+                            `;
+                            resultsDiv.appendChild(companyDiv);
+                        });
+
+                        buffer = ""; // Clear buffer
+                    }
                 } catch (err) {
-                    console.debug("DEBUG: JSON parse error or incomplete data, skipping to next chunk", err);
+                    console.warn("DEBUG: JSON parsing failed for current buffer, waiting for more data. Error:", err);
+
+                    // Try to detect if the buffer is HTML
+                    if (/<\/?[a-z][\s\S]*>/i.test(buffer)) {
+                        console.debug("DEBUG: HTML-like content detected, appending as progress feedback");
+
+                        // Clear all progress chunks and display the final HTML
+                        document.querySelectorAll(".progress-chunk").forEach((el) => el.remove());
+
+                        const finalDiv = document.createElement("div");
+                        finalDiv.innerHTML = buffer; // Display the HTML
+                        resultsDiv.innerHTML = ""; // Overwrite current results
+                        resultsDiv.appendChild(finalDiv);
+
+                        buffer = ""; // Clear buffer
+                    }
                 }
             }
 

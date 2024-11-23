@@ -29,30 +29,35 @@ def process_data():
             yield '{"status": "success", "results": ['  # Initial JSON structure
             first = True
             for company_name, company_info in data.items():
-                if not first:
-                    yield ','
-                first = False
-                
-                time.sleep(3)  # Simulate delay
-                
-                scraped_data = f"""
-                Company Name: {company_name}
-                Industry: {company_info.get('mainBusinessLine', 'N/A')}
-                Website: {company_info.get('url', 'N/A')}
-                """
-                print(f"DEBUG: Processing {company_name}")  # Debug log for company processing
-                
-                analysis, sales_leads = process_company(scraped_data, gemini_model, prompts)
-                result = {
-                    "company_name": company_name,
-                    "analysis": analysis,
-                    "sales_leads": sales_leads
-                }
-                
-                json_chunk = json.dumps(result)
-                print(f"DEBUG: Sending chunk: {json_chunk}")  # Debug log for JSON chunk
-                yield json_chunk
+                try:
+                    if not first:
+                        yield ','
+                    first = False
+                    
+                    time.sleep(5)  # Simulate delay
+                    
+                    scraped_data = f"""
+                    Company Name: {company_name}
+                    Industry: {company_info.get('mainBusinessLine', 'N/A')}
+                    Website: {company_info.get('url', 'N/A')}
+                    """
+                    print(f"DEBUG: Processing {company_name}")  # Debug log for company processing
+                    
+                    analysis, sales_leads = process_company(scraped_data, gemini_model, prompts)
+                    result = {
+                        "company_name": company_name,
+                        "analysis": analysis,
+                        "sales_leads": sales_leads
+                    }
+                    
+                    json_chunk = json.dumps(result)
+                    print(f"DEBUG: Sending chunk: {json_chunk}")  # Debug log for JSON chunk
+                    yield json_chunk
+                except Exception as e:
+                    print(f"ERROR: Skipping {company_name} due to error: {e}")
+                    yield json.dumps({"company_name": company_name, "error": str(e)})
             yield ']}'
+
 
 
         response = Response(stream_with_context(generate_responses()), content_type="application/x-ndjson")
@@ -81,6 +86,8 @@ def process_company(scraped_data, gemini_model, prompts):
 
     # Format the analysis and sales leads for proper HTML rendering
     def format_to_html(text):
+        if not text:
+            return "<p>No data available</p>"
         lines = text.splitlines()
         html_lines = []
         for line in lines:
