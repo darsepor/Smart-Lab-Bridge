@@ -1,0 +1,29 @@
+A. Filtering companies
+
+1. Open filtering_by_categories
+2. Run index.html (as file or as server). No backend needed for this one
+3. Select from Dropdown method
+4. Second option: "manufacture of electric domestic appliances"
+5. Connect default_companies.csv to "upload companies csv file"
+6. Click "Filter and Download" button
+7. Save csv file, that website provided. Be ready to use this file in next step
+
+B. Data collecting
+
+1. Open CSV to json folder
+2. Run python app.py (pip install flask/flask_cors etc if needed)
+3. Open index.html as file, DO NOT open http://127.0.0.1:5000
+4. Choose File relevant_companies_last_search.csv, which you should got from A part
+5. Click "start scraping" and wait until browser give you json (it can take long time, if you have many companies in csv)
+5.1 If it takes too much time, you can try to use "spider" from "archive/company_scraper" folder
+6. Save json and be ready to use in the next step.
+
+C. Sales leads generation with AI
+
+1. Open gemini.py (generate_sales_lead folder) in notepad or any text editors (vs, vscode, pycharm, notepad ++ etc)
+2. Find API key and replace with your own api key generated in https://aistudio.google.com/app/apikey
+3. Run python backend.py (pip install Flask Flask-CORS PyYAML google-generativeai python-dotenv if needed)
+4. Open index.html as file, DO NOT open http://127.0.0.1:5000
+5. Put your json in "choose file"
+6. Click "Process data" button
+7. On the website, during processing, you will be able to see the process of receiving json chunks. After all the parts are received and everything is processed, the website will have structured text that is easy to read and work with further.

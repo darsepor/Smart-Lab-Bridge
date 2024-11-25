@@ -149,10 +149,21 @@ select#dropdown {
     overflow: auto;
     padding: 10px;
 }
+/*
+div#dropdown-container {
+    width: 650px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    align-content: center;
+}
+*/
 
 /* Style the dropdown options */
 select option {
     padding: 5px;
+    width: 450px;
     background: rgba(255, 255, 255, 0.9);
 }
 

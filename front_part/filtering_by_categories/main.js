@@ -159,7 +159,7 @@ function filterCSV(csvData, filterList) {
 
     return [header, ...filteredRows].join('\n'); // Combine filtered rows with header
 }
-
+/*
 function downloadCSV(data, filename) {
     const blob = new Blob([data], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
@@ -168,4 +168,21 @@ function downloadCSV(data, filename) {
     link.download = filename;
     link.style.display = 'block';
     link.textContent = 'Download Filtered CSV';
+}
+*/
+function downloadCSV(data, filename) {
+    const blob = new Blob([data], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+
+    // Programmatically trigger the click event to start the download
+    document.body.appendChild(link); // Required for Firefox
+    link.click();
+
+    // Clean up
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
 }

@@ -132,5 +132,18 @@ def upload_csv():
         return jsonify({"error": f"Error saving uploaded file: {e}"}), 500
     return jsonify({"message": "File uploaded successfully"})
 
+
+@app.route('/grouped_scraped_data.json', methods=['GET'])
+def get_scraped_data():
+    output_file = 'grouped_scraped_data.json'
+    if not os.path.exists(output_file):
+        return jsonify({"error": "File not found"}), 404
+    try:
+        # Serve the file as an attachment to force download
+        return send_from_directory(BASE_DIR, output_file, as_attachment=True)
+    except Exception as e:
+        return jsonify({"error": f"Error serving file: {e}"}), 500
+
+
 if __name__ == '__main__':
     app.run(debug=True)
