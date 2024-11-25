@@ -1,0 +1,181 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+/* Background video */
+#background-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1; /* Keeps it behind other content */
+}
+/* Style for the content wrapper */
+body {
+    color: white; /* Text color for visibility */
+}
+/* Align content nicely */
+h1, div {
+    position: relative;
+    z-index: 1; /* Ensures content is above the video */
+    text-align: center;
+    margin: 20px;
+    background: rgba(216, 205, 119, 0.5); /* Adds a dark background for readability */
+    padding: 20px;
+    border-radius: 10px;
+}
+/* Style the content to appear over the video */
+.content {
+    position: relative; /* Ensure stacking above the video */
+    z-index: 1;
+    color: white; /* Make text stand out */
+    text-align: center;
+    padding: 20px;
+}
+/* Optional button glow effect */
+.glow-on-hover {
+    width: 220px;
+    height: 50px;
+    border: none;
+    outline: none;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.7); /* Slightly transparent for contrast */
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    border-radius: 30px;
+}
+.glow-on-hover:hover {
+    background: rgba(255, 255, 255, 0.2); /* Subtle hover effect */
+    color: #ead68f; /* Ensures a strong contrast */
+    font-weight: bold; /* Optional for better visibility */
+}
+
+.glow-on-hover:before {
+    content: '';
+    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    position: absolute;
+    top: -2px;
+    left:-2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(5px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    animation: glowing 20s linear infinite;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+    border-radius: 10px;
+}
+
+.glow-on-hover:active {
+    color: #eae28c
+}
+
+.glow-on-hover:active:after {
+    background: transparent;
+}
+
+.glow-on-hover:hover:before {
+    opacity: 1;
+}
+
+.glow-on-hover:after {
+    z-index: -1;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #111;
+    left: 0;
+    top: 0;
+    border-radius: 10px;
+}
+/* Scroll handling (if necessary) */
+body {
+    overflow: auto;
+}
+
+@keyframes glowing {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
+}
+
+
+/* Input, select, list etc */
+
+/* General styling for select, input, and buttons */
+select, input[type="file"], button {
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255, 255, 255, 0.8);
+    color: #333;
+    width: 100%;
+    max-width: 300px;
+    margin: 10px auto;
+    display: block;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s, color 0.3s, transform 0.2s ease-in-out;
+}
+
+/* Hover effect for all inputs and buttons */
+select:hover, input[type="file"]:hover, button:hover {
+    background: rgba(216, 205, 119, 0.9);
+    color: #000;
+    transform: translateY(-3px);
+}
+
+/* Focus effect for inputs */
+select:focus, input[type="file"]:focus {
+    outline: none;
+    border: 2px solid rgba(216, 205, 119, 0.9);
+    box-shadow: 0 0 10px rgba(216, 205, 119, 0.8);
+}
+
+/* Styling for the multi-select dropdown */
+select#dropdown {
+    height: 150px; /* Adjust size for multiple options */
+    background: rgba(255, 255, 255, 0.8);
+    color: #333;
+    overflow: auto;
+    padding: 10px;
+}
+
+/* Style the dropdown options */
+select option {
+    padding: 5px;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+select option:hover {
+    background: rgba(216, 205, 119, 0.7);
+    color: #000;
+}
+
+/* Additional style for "Choose file" field */
+input[type="file"] {
+    cursor: pointer;
+}
+
+/* Styling the file input label for better visibility */
+input[type="file"]::file-selector-button {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
