@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSV Filter Tool</title>
+    <link rel="stylesheet" href="css.css">
 </head>
 <body>
+    <video autoplay muted loop id="background-video">
+        <source src="Pre_comp_1_3.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
     <h1>CSV Filter Tool</h1>
     <div>
         <h3>Step 1: Choose Filter Method</h3>
@@ -33,18 +38,22 @@
         </div>
     </div>
 
-    <div>
-        <h3>Step 2: Upload Companies CSV File (or skip to use all Finnish companies)</h3>
-        <input type="file" id="csv-file" accept=".csv">
-    </div>
+<div>
+    <h3>Step 2: Upload Companies CSV File</h3>
+    <label for="csv-file">Choose CSV File:</label>
+    <input type="file" id="csv-file" accept=".csv">
+</div>
+
 
     <div>
         <h3>Step 3: Start Filtering</h3>
-        <button id="filter-button">Filter and Download</button>
+        <button id="filter-button" class="glow-on-hover" >Filter and Download</button>
     </div>
 
     <a id="download-link" style="display:none;">Download Filtered CSV</a>
 
     <script src="main.js" defer></script>
+
+
 </body>
 </html>
