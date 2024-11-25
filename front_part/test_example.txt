@@ -26,4 +26,6 @@ C. Sales leads generation with AI
 4. Open index.html as file, DO NOT open http://127.0.0.1:5000
 5. Put your json in "choose file"
 6. Click "Process data" button
-7. On the website, during processing, you will be able to see the process of receiving json chunks. After all the parts are received and everything is processed, the website will have structured text that is easy to read and work with further.
+7. On the website, during processing, you will be able to see the process of receiving json chunks.
+After all the parts are received and everything is processed,
+the website will have structured text that is easy to read and work with further.
