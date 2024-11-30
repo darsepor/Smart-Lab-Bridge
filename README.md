@@ -1,2 +1,2 @@
 # Smart-Lab-Bridge
-Submission for the Raksa AI Innovation Challenge, November 2024
+Submission for the Raksa AI Innovation Challenge, November 2024, 1st place. A first-phase minimum viable product built for the Metropolia SmartLab for connecting to prospective clients. An LLM (Google Gemini, in current implementation) scrapes and analyzes the websites of firms to generate customizable sales leads. Created by Yehor Tereshchenko, Darijus Seporaitis, Miikka Lahtinen, Nikita Makurin, Kirill Tolkunov.
