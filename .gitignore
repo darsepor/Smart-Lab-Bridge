@@ -163,3 +163,4 @@ cython_debug/
 filtered_active_companies_combined.csv
 data_20241118.json
 filtered_active_companies.csv
+company_scraper/scraped_data_all_relevant_PRH_companies.json

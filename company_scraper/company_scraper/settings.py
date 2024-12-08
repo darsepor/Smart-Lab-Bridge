@@ -19,11 +19,11 @@ NEWSPIDER_MODULE = "company_scraper.spiders"
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
 
-DOWNLOAD_DELAY = 1  # Delay in seconds between requests
+DOWNLOAD_DELAY = 0.5  # Delay in seconds between requests
 
-CONCURRENT_REQUESTS_PER_DOMAIN = 8
-CONCURRENT_REQUESTS = 64
-
+CONCURRENT_REQUESTS_PER_DOMAIN = 4
+CONCURRENT_REQUESTS = 16
+DEPTH_LIMIT = 3
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 
@@ -73,14 +73,14 @@ CONCURRENT_REQUESTS = 64
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
-#AUTOTHROTTLE_ENABLED = True
+AUTOTHROTTLE_ENABLED = True
 # The initial download delay
-#AUTOTHROTTLE_START_DELAY = 5
+AUTOTHROTTLE_START_DELAY = 1
 # The maximum download delay to be set in case of high latencies
-#AUTOTHROTTLE_MAX_DELAY = 60
+AUTOTHROTTLE_MAX_DELAY = 10
 # The average number of requests Scrapy should be sending in parallel to
 # each remote server
-#AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
+AUTOTHROTTLE_TARGET_CONCURRENCY = 2.0
 # Enable showing throttling stats for every response received:
 #AUTOTHROTTLE_DEBUG = False
 
