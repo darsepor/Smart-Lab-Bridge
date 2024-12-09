@@ -7,7 +7,7 @@ from scrapy.linkextractors import LinkExtractor
 class CompanySpider(CrawlSpider):
     name = 'company_spider'
 
-    def __init__(self, company_limit=500, *args, **kwargs):
+    def __init__(self, company_limit=10, *args, **kwargs):
         super(CompanySpider, self).__init__(*args, **kwargs)
 
         self.company_limit = int(company_limit) if company_limit else None
@@ -59,13 +59,13 @@ class CompanySpider(CrawlSpider):
                 }
                 new_companies_count += 1
 
-    rules = (
-        Rule(
-            LinkExtractor(allow=(), deny=(), unique=True),
-            callback='parse_item',
-            follow=True
-        ),
-    )
+        self.rules = (
+            Rule(
+                LinkExtractor(allow_domains=list(self.data_by_domain.keys()), allow=(), deny=(), unique=True),
+                callback='parse_item',
+                follow=True
+            ),
+        )
 
     def parse_item(self, response):
         domain = response.url.split("//")[-1].split("/")[0]
