@@ -3,34 +3,35 @@ import csv
 import json
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
+import logging
+from scrapy.spidermiddlewares.depth import DepthMiddleware
 
 class CompanySpider(CrawlSpider):
     name = 'company_spider'
 
     def __init__(self, company_limit=10, *args, **kwargs):
         super(CompanySpider, self).__init__(*args, **kwargs)
-
+        logging.getLogger('scrapy.spidermiddlewares.depth').setLevel(logging.INFO)
         self.company_limit = int(company_limit) if company_limit else None
 
         project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
         csv_path = os.path.join(project_root, 'processed_data_from_prh.fi', 'relevant_companies_broadly.csv')
         self.output_file = 'scraped_data_all_relevant_PRH_companies.json'
 
-        # Load existing data if any
         if os.path.exists(self.output_file):
             with open(self.output_file, 'r', encoding='utf-8') as f:
                 self.existing_data = json.load(f)
         else:
             self.existing_data = {}
 
-        # Ensure the CSV file exists
         if not os.path.exists(csv_path):
             raise FileNotFoundError(f"CSV file not found at: {csv_path}")
 
         self.start_urls = []
         self.data_by_domain = {}
+        self.allowed_domains = []
         new_companies_count = 0
-        # Read the CSV and add only new domains
+
         with open(csv_path, 'r', encoding='utf-8') as csvfile:
             reader = csv.DictReader(csvfile)
             for i, row in enumerate(reader):
@@ -40,16 +41,11 @@ class CompanySpider(CrawlSpider):
                 url = row['website.url']
                 if not url.startswith('http'):
                     url = 'http://' + url
-                domain = url.split("//")[-1].split("/")[0]
-                # Normalize domain (to handle www. variants)
-                domain = domain.replace('www.', '')
+                domain = url.split("//")[-1].split("/")[0].replace('www.', '')
 
-                # Check if domain already scraped
                 if domain in self.existing_data:
-                    # Already scraped -- skip
                     continue
-                
-                # If not in existing data, add to start_urls and data_by_domain
+
                 self.start_urls.append(url)
                 self.data_by_domain[domain] = {
                     'company_name': row['name'],
@@ -57,15 +53,18 @@ class CompanySpider(CrawlSpider):
                     'mainBusinessLine': row['mainBusinessLine.descriptions'],
                     'pages': []
                 }
+                self.allowed_domains.append(domain)
                 new_companies_count += 1
 
+        # Dynamically define rules after `allowed_domains` is populated
         self.rules = (
             Rule(
-                LinkExtractor(allow_domains=list(self.data_by_domain.keys()), allow=(), deny=(), unique=True),
+                LinkExtractor(allow=(), deny=(), allow_domains=self.allowed_domains, unique=True),
                 callback='parse_item',
                 follow=True
             ),
         )
+        super(CompanySpider, self)._compile_rules()  # Compile rules dynamically
 
     def parse_item(self, response):
         domain = response.url.split("//")[-1].split("/")[0]

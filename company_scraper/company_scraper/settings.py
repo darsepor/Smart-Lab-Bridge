@@ -12,7 +12,6 @@ BOT_NAME = "company_scraper"
 SPIDER_MODULES = ["company_scraper.spiders"]
 NEWSPIDER_MODULE = "company_scraper.spiders"
 
-LOG_LEVEL = 'INFO' 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "company_scraper (+http://www.yourdomain.com)"
 
@@ -24,6 +23,7 @@ DOWNLOAD_DELAY = 0.5  # Delay in seconds between requests
 CONCURRENT_REQUESTS_PER_DOMAIN = 12
 CONCURRENT_REQUESTS = 48
 DEPTH_LIMIT = 1
+
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 
